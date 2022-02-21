@@ -12,28 +12,25 @@ Outil d'accès au presse papier Windows pour le Framework [```ItsMyConsole```](h
 
 ## Pourquoi faire ?
 
-Vous allez pouvoir étendre le Framework pour application Console .Net [```ItsMyConsole```](https://github.com/dtarroz/ItsMyConsole) avec un outil "d'exemple" qui permet de rechercher des personnages de Star Wars avec The Star Wars API (SWAPI).
+Vous allez pouvoir étendre le Framework pour application Console .Net [```ItsMyConsole```](https://github.com/dtarroz/ItsMyConsole) avec un outil d'accès au presse papier Windows.
 
-L'outil "d'exemple" ```ItsMyConsole.Tools.Template.Example``` met à disposition :
- - Un exemple de structure de projet pour aider à démarrager un outil pour [```ItsMyConsole```](https://github.com/dtarroz/ItsMyConsole)
- - Exemple d'implementation d'un outil avec la gestion des tests unitaires
- - Exemple de paramètres pour configurer l'outil
- - Exemple d'implementation d'un readme
- - Exemple sur la recherche des personnages de l'univers de Star Wars
+L'outil ```ItsMyConsole.Tools.Windows.Clipboard``` met à disposition :
+ - La lecture un texte contenu dans le presse papier Windows
+ - L'insertion d'un texte dans le presse papier Windows
+ - Il permet de ne pas modifier l'état de cloisonnement du thread principal pour accéder au presse papier
 
 ## Getting Started
 
 1. Créer un projet **"Application Console .Net"** avec le nom *"MyExampleConsole"*
 2. Ajouter [```ItsMyConsole```](https://github.com/dtarroz/ItsMyConsole) au projet depuis le gestionnaire de package NuGet
-3. Ajouter ```ItsMyConsole.Tools.Template.Example``` au projet depuis le gestionnaire de package NuGet *[C'est pour l'exemple, ce NuGet n'existe pas]*
+3. Ajouter ```ItsMyConsole.Tools.Windows.Clipboard``` au projet depuis le gestionnaire de package NuGet
 4. Dans le projet, modifier la méthode **"Main"** dans le fichier **"Program.cs"** par le code suivant :
 ```cs
 using ItsMyConsole;
+using ItsMyConsole.Tools.Windows.Clipboard;
 using System;
-using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using ItsMyConsole.Tools.Template.Example;
 
 namespace MyExampleConsole
 {
@@ -46,23 +43,21 @@ namespace MyExampleConsole
             ccli.Configure(options => {
                 options.Prompt = ">> ";
                 options.LineBreakBetweenCommands = true;
-                options.HeaderText = "###########\n#  SWAPI  #\n###########\n";
+                options.HeaderText = "#######################\n#  Windows Clipboard  #\n#######################\n";
                 options.TrimCommand = true;
             });
 
-            // SWAPI configuration
-            ccli.ConfigureSwapi(new SwapiOption { MaxResultSearchPeople = 10 });
+            // Display text from clipboard
+            ccli.AddCommand("^get$", RegexOptions.IgnoreCase, tools => {
+                string text = tools.Clipboard().GetText();
+                Console.WriteLine($"Get Clipboard : {text}");
+            });
 
-            // Display the name of peoples
-            // Example : people sky
-            ccli.AddCommand("^people (.+)$", RegexOptions.IgnoreCase, async tools => {
-                string name = tools.CommandMatch.Groups[1].Value;
-                List<People> peoples = await tools.Swapi().SearchPeople(name);
-                if (peoples.Count > 0)
-                    foreach (People people in peoples)
-                        Console.WriteLine(people.Name);
-                else
-                    Console.WriteLine("Aucun personnage trouvé");
+            // Set text in clipboard
+            // Example : set NEW_TEXT
+            ccli.AddCommand("^set (.+)$", RegexOptions.IgnoreCase, tools => {
+                string text = tools.CommandMatch.Groups[1].Value;
+                tools.Clipboard().SetText(text);
             });
 
             await ccli.RunAsync();
@@ -77,13 +72,15 @@ Voici le résultat attendu lors de l'utilisation de la Console :
 
 Dans cet exemple de code on a configuré avec ```Configure```, le prompt d’attente des commandes ```options.Prompt```, la présence d'un saut de ligne entre les saisies ```options.LineBreakBetweenCommands``` et l’en-tête affichée au lancement ```options.HeaderText```. 
 
-On ajoute la configuration de SWAPI avec ```ConfigureSwapi``` et on lui renseigne le nombre de résultat maximum retourné ```MaxResultSearchPeople```.
+Puis avec le premier ```AddCommand```, on a ajouté un pattern d’interprétation des lignes de commande ```^get$``` *(seulement "get")* qui est insensible à la casse ```RegexOptions.IgnoreCase```.
 
-Puis avec ```AddCommand```, on a ajouté un pattern d’interprétation des lignes de commande ```^people (.+)$``` *(commence par **"people"** et suivi du texte pour la recherche)* qui est insensible à la casse ```RegexOptions.IgnoreCase```.
+Et avec le deuximème ```AddCommand```, on a ajouté un pattern d’interprétation des lignes de commande ```^set (.+)$``` *(commence par "set" et suivi d'un texte)* qui est insensible à la casse ```RegexOptions.IgnoreCase```.
 
-Lors de l'exécution de la Console, si on saisit une commande qui commence par **"people"** avec un texte à la suite, il lancera l'implémentation de l'action associée. Dans cet exemple, il récupère le texte de recherche en utilisant ```tools.CommandMatch``` depuis les outils disponibles *(résultat du Match de l'expression régulière)* pour lui permet de récupérer les informations sur les personnages de Star Wars associés avec ```tools.Swapi().SearchPeople```. Avec les informations récupérées, il affiche leur nom dans la Console.
+Lors de l'exécution de la Console, si on saisit une commande qui commence par **"set"** avec le texte à mettre dans le presse papier, il lancera l'implémentation de l'action associée (le deuxième ```AddCommand```). Dans cet exemple, il récupère le texte en utilisant ```tools.CommandMatch``` depuis les outils disponibles *(résultat du Match de l'expression régulière)*. Avec le texte récupéré, il l'insert dans le presse papier Windows en utilisant ```tools.Clipboard().SetText```.
 
-Maintenant que l'on a configuré la Console et l'implémentation de l'action associée au pattern ```^people (.+)$```, l'utilisation de ```RunAsync``` lance la mise en attente d'une saisie de commande par l'utilisateur.
+Si on saisit la commande **"get"**, il lancera l'implémentation de l'action associée (le premier ```AddCommand```). Il lit le presse papier en utilisant ```tools.Clipboard().GetText``` et il affiche le texte obtenu.
+
+Maintenant que l'on a configuré la Console et l'implémentation des actions, l'utilisation de ```RunAsync``` lance la mise en attente d'une saisie de commande par l'utilisateur.
 
 ## Comment se servir de l'outil ?
 
