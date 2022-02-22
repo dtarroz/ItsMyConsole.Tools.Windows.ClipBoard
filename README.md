@@ -8,7 +8,8 @@ Outil d'accès au presse papier Windows pour le Framework [```ItsMyConsole```](h
 - [Pourquoi faire ?](#pourquoi-faire-)
 - [Getting Started](#getting-started)
 - [Comment se servir de l'outil ?](#comment-se-servir-de-loutil-)
-- [Rechercher un personnage de Star Wars](#rechercher-un-personnage-de-star-wars)
+- [Lecture d'un texte dans le presse papier](#lecture-dun-texte-dans-le-presse-papier)
+- [Insertion d'un texte dans le presse papier](#insertion-dun-texte-dans-le-presse-papier)
 
 ## Pourquoi faire ?
 
@@ -84,7 +85,7 @@ Maintenant que l'on a configuré la Console et l'implémentation des actions, l'
 
 ## Comment se servir de l'outil ?
 
-Vous pouvez accéder à l'outil "d'exemple" SWAPI lorsque vous ajoutez une interprétation de commande avec ```AddCommand```.
+Vous pouvez accéder à l'outil d'accès au presse papier Windows lorsque vous ajoutez une interprétation de commande avec ```AddCommand```.
 
 ```cs
 ConsoleCommandLineInterpreter ccli = new ConsoleCommandLineInterpreter();
@@ -92,30 +93,34 @@ ConsoleCommandLineInterpreter ccli = new ConsoleCommandLineInterpreter();
 // Add command
 ccli.AddCommand("<PATERN>", tools => 
 {
-    List<People> peoples = await tools.Swapi().SearchPeople("<NAME>");
+    string text = tools.Clipboard().GetText();
 });
 ```
 
-Vous devez ajouter ```using ItsMyConsole.Tools.Template.Example;``` pour avoir accès a l'outil "d'exemple" SWAPI depuis ```tools``` de ```AddCommand```.
+Vous devez ajouter ```using ItsMyConsole.Tools.Windows.Clipboard;``` pour avoir accès a l'outil d'accès au presse papier Windows depuis ```tools``` de ```AddCommand```.
 
-## Rechercher un personnage de Star Wars
+## Lecture d'un texte dans le presse papier
 
-Vous pouvez rechercher un personnage par son nom en utilisant ```SearchPeople```.
-
-| Propriété | Description |
-| :-------- | :---------- |
-| name | Le nom des personnages à chercher |
+Vous pouvez lire un texte contenu dans le presse papiper en utilisant ```GetText```.
 
 ```cs
 ccli.AddCommand("<PATERN>", tools => 
 {
-    List<People> peoples = await tools.Swapi().SearchPeople("<NAME>");
+    string text = tools.Clipboard().GetText();
 });
 ```
 
-Vous avez en retour un objet de type ```People```.
+## Insertion d'un texte dans le presse papier
 
-| Nom de la propriété | Description |
-| :------------------ | :---------- |
-| Id | L'identifiant du personnage |
-| Name | Le nom du personnage |
+Vous pouvez insérer un texte dans le presse papier en utilisant ```SetText```.
+
+| Propriété | Description |
+| :-------- | :---------- |
+| text | Le texte à mettre dans le presse papier |
+
+```cs
+ccli.AddCommand("<PATERN>", tools => 
+{
+    tools.Clipboard().SetText("<TEXT>");
+});
+```
