@@ -2,14 +2,14 @@
 
   <PropertyGroup>
     <TargetFramework>net472</TargetFramework>
-    <PackageVersion>0.1.0</PackageVersion>
+    <PackageVersion>1.0.0</PackageVersion>
     <Title>ItsMyConsole.Tools.Windows.Clipboard</Title>
     <Authors>Damien TARROZ</Authors>
     <Description>Outil d'accès au presse papier Windows pour le Framework ItsMyConsole</Description>
     <Copyright>Copyright © 2022 Damien TARROZ</Copyright>
     <PackageProjectUrl>https://github.com/dtarroz/ItsMyConsole.Tools.Windows.Clipboard</PackageProjectUrl>
-    <AssemblyVersion>0.1.0</AssemblyVersion>
-    <FileVersion>0.1.0</FileVersion>
+    <AssemblyVersion>1.0.0</AssemblyVersion>
+    <FileVersion>1.0.0</FileVersion>
     <PackageIcon>logo.png</PackageIcon>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageTags>console cli windows clipboard</PackageTags>
