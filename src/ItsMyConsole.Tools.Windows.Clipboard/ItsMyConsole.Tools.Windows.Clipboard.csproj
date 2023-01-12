@@ -12,7 +12,7 @@
     <FileVersion>1.1.0</FileVersion>
     <PackageIcon>logo.png</PackageIcon>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <PackageTags>console cli windows clipboard</PackageTags>
+    <PackageTags>console cli windows clipboard itsmyconsole</PackageTags>
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
@@ -26,12 +26,6 @@
   <ItemGroup>
     <None Include="..\..\docs\logo.png" Pack="true" PackagePath="" />
     <None Remove="ItsMyConsole.Tools.Windows.Clipboard.csproj.DotSettings" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
-      <_Parameter1>ItsMyConsole.Tools.Windows.Clipboard.Tests</_Parameter1>
-    </AssemblyAttribute>
   </ItemGroup>
 
   <ItemGroup>
