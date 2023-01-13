@@ -22,17 +22,6 @@ namespace ItsMyConsole.Tools.Windows.Clipboard
         }
 
         /// <summary>
-        /// Récupérer le texte du presse papier en tant que HTML
-        /// </summary>
-        public string GetTextAsHtml() {
-            string text = null;
-            RunThread(() => {
-                text = System.Windows.Forms.Clipboard.GetText(TextDataFormat.Html);
-            });
-            return text;
-        }
-
-        /// <summary>
         /// Mettre un texte dans le presse papier
         /// </summary>
         /// <param name="text">Le texte à mettre dans le presse papier</param>
