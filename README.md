@@ -124,3 +124,19 @@ ccli.AddCommand("<PATERN>", tools =>
     tools.Clipboard().SetText("<TEXT>");
 });
 ```
+
+## Insertion d'un texte dans le presse papier en tant que HTML et texte plat
+
+Vous pouvez insérer un texte en tant que HTML dans le presse papier en utilisant ```SetTextAsHtml```, ainsi qu'une version "plat" du texte pour les logiciels qui me gére pas un contenu collé au format HTML.
+
+| Propriété | Description |
+| :-------- | :---------- |
+| htmlText | Le texte à mettre dans le presse papier en tant que HTML |
+| plainText | Le texte "plat" à mettre dans le presse papier pour les logiciels qui ne gére pas le texte en tant que HTML |
+
+```cs
+ccli.AddCommand("<PATERN>", tools => 
+{
+    tools.Clipboard().SetTextAsHtml("<a href='htts://www.google.fr'>MON TEXTE en HTML</a>", "MON TEXTE PLAT");
+});
+```
