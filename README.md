@@ -10,6 +10,7 @@ Outil d'accès au presse papier Windows pour le Framework [```ItsMyConsole```](h
 - [Comment se servir de l'outil ?](#comment-se-servir-de-loutil-)
 - [Lecture d'un texte dans le presse papier](#lecture-dun-texte-dans-le-presse-papier)
 - [Insertion d'un texte dans le presse papier](#insertion-dun-texte-dans-le-presse-papier)
+- [Insertion d'un texte dans le presse papier en tant que HTML et texte plat](#insertion-dun-texte-dans-le-presse-papier-en-tant-que-html-et-texte-plat)
 
 ## Pourquoi faire ?
 
